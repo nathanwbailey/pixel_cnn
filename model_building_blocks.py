@@ -25,16 +25,16 @@ class MaskedConv2D(keras.layers.Layer):
             self.mask[kernel_shape[0] // 2, kernel_shape[1] // 2, ...] = 1.0
     
     def call(self, input: tf.Tensor) -> tf.Tensor:
-        self.conv.kernel.assign(self.conv.kernel*self.mask)
-        return self.conv(input)
+        self.conv_layer.kernel.assign(self.conv_layer.kernel*self.mask)
+        return self.conv_layer(input)
 
 
 
-def ResidualBlock(keras.layers.Layer):
+class ResidualBlock(keras.layers.Layer):
     def __init__(self, filters: int) -> None:
         super().__init__()
-        self.conv_layer_1 = keras.layers.Conv2D(filters = filters // 2, kernel_size=1, actiavtion="relu")
-        self.pixel_conv = MaskedConv2D(mask_type="B", filters = filters // 2, kernel_size=3, actiavtion="relu", padding="same")
+        self.conv_layer_1 = keras.layers.Conv2D(filters = filters // 2, kernel_size=1, activation="relu")
+        self.pixel_conv = MaskedConv2D(mask_type="B", filters = filters // 2, kernel_size=3, activation="relu", padding="same")
         self.conv_layer_2 = keras.layers.Conv2D(filters=filters, kernel_size=1, activation="relu")
     
     def call(self, input: tf.Tensor) -> tf.Tensor:
