@@ -34,7 +34,3 @@ class ImageGenerator(keras.callbacks.Callback):
             generated_images,
             save_to=f"./output/generated_img_{epoch}.png",
         )
-
-        
-
-    
