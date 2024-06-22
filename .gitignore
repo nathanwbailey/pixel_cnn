@@ -2,3 +2,4 @@ venv
 output*
 nohup*
 data
+*.pyc
