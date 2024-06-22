@@ -33,7 +33,7 @@ class MaskedConv2D(keras.layers.Layer):
 class ResidualBlock(keras.layers.Layer):
     def __init__(self, filters: int) -> None:
         super().__init__()
-        self.conv_layer_1 = keras.layers.Conv2D(filters = filters // 2, kernel_size=1, activation="relu")
+        self.conv_layer_1 = keras.layers.Conv2D(filters = filters, kernel_size=1, activation="relu")
         self.pixel_conv = MaskedConv2D(mask_type="B", filters = filters // 2, kernel_size=3, activation="relu", padding="same")
         self.conv_layer_2 = keras.layers.Conv2D(filters=filters, kernel_size=1, activation="relu")
     

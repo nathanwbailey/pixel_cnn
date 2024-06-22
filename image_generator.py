@@ -4,9 +4,10 @@ from tensorflow import keras
 from display import display
 
 class ImageGenerator(keras.callbacks.Callback):
-    def __init__(self, num_img: int, pixel_levels: int) -> None:
+    def __init__(self, num_img: int, pixel_levels: int, save_dir: str = 'output') -> None:
         self.num_img = num_img
         self.pixel_levels = pixel_levels
+        self.save_dir=save_dir
     
     def sample_from(self, probs: tf.Tensor, temperature: float) -> np.ndarray:
         probs = probs ** (1 / temperature)
@@ -32,5 +33,5 @@ class ImageGenerator(keras.callbacks.Callback):
         generated_images = self.generate(temperature=1.0)
         display(
             generated_images,
-            save_to=f"./output/generated_img_{epoch}.png",
+            save_to=f"{self.save_dir}/generated_img_{epoch}.png",
         )
