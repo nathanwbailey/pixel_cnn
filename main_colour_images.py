@@ -1,14 +1,15 @@
 from model_colour import build_model
-from image_generator import ImageGenerator
+from image_generator_colour import ImageGenerator
 from display import display
 import tensorflow as tf
 import numpy as np
 from tensorflow import keras
+from colour_loss import colour_cross_entropy_loss
 
-IMAGE_SIZE = 16
-PIXEL_LEVELS = 6
-N_FILTERS = 32
-RESIDUAL_BLOCKS = 5
+IMAGE_SIZE = 32
+PIXEL_LEVELS = 8
+N_FILTERS = 128
+RESIDUAL_BLOCKS = 7
 BATCH_SIZE = 128
 EPOCHS = 450
 SAVE_DIR = 'output_colour'
@@ -24,8 +25,6 @@ def preprocess_images(images: np.ndarray) -> tuple[np.ndarray]:
 
 input_data, output_data = preprocess_images(x_train)
 
-print(output_data.shape)
-
 display(x_train, save_to=f"{SAVE_DIR}/original_image.png")
 display(input_data, save_to=f"{SAVE_DIR}/input_image.png")
 
@@ -35,7 +34,7 @@ model.summary()
 opt = keras.optimizers.Adam(learning_rate=0.01)
 lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.1, patience=3, verbose=1, min_lr=1e-7, min_delta=1e-4)
 early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss', verbose=1, patience=10)
-model.compile(optimizer=opt, loss="sparse_categorical_crossentropy")
+model.compile(optimizer=opt, loss=colour_cross_entropy_loss)
 
 img_generator_callback = ImageGenerator(num_img=100, pixel_levels=PIXEL_LEVELS, save_dir=SAVE_DIR)
 model.fit(input_data, output_data, batch_size=BATCH_SIZE, epochs=EPOCHS, callbacks=[lr_scheduler, early_stopping, img_generator_callback], verbose=2)

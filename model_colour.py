@@ -1,4 +1,5 @@
 from tensorflow import keras
+import tensorflow as tf
 from model_building_blocks_colour import ResidualBlock
 from model_building_blocks_colour import MaskedConv2D
 
